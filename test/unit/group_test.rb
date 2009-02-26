@@ -32,5 +32,6 @@ class GroupTest < ActiveSupport::TestCase
     group.description = (0..26).map {|i| i.to_s * 72}.to_s
     assert ! group.valid?
     assert group.errors.on(:description)
+    assert_match /255/, group.errors.on(:description)
   end
 end
