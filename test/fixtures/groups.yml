@@ -1,11 +1,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  name: MyString
-  url: MyString
-  description: MyString
+  name: Ruby Nerds
+  url: http://www.rubynerds.com
+  description: A group of Ruby Nerds based out of Seattle, WA
 
 two:
-  name: MyString
-  url: MyString
-  description: MyString
+  name: Rubyholics
+  url: http://localhost:3000
+  description: Another group, the group behind this site, located at your mom's house.
