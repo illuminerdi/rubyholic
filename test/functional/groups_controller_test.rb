@@ -73,6 +73,50 @@ class GroupsControllerTest < ActionController::TestCase
       assert elements.size == 2
     end
   end
+  
+  test "should allow no url" do
+    put :create, :group => {
+      :name => "foo",
+      :url => "",
+      :description => "In this day an age - a new group with no URL."
+    }
+    assert_redirected_to group_path(assigns(:group))
+    
+  end
+  
+  test "should throw error on bad url" do
+    put :update, :id => groups(:one).id, :group => {
+      :url => "asdf"
+    }
+    assert_response :success
+    group = assigns(:group)
+    assert ! group.valid?
+    assert group.errors.size == 1
+    error_msgs = group.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert @response.body.include?(error_msg)
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert elements.size == 2
+    end
+  end
+  
+  test "should throw error with stupid-big description" do
+    put :update, :id => groups(:one).id, :group => {
+      :description => (0..26).map {|i| i.to_s * 72}.to_s
+    }
+    assert_response :success
+    group = assigns(:group)
+    assert ! group.valid?
+    assert group.errors.size == 1
+    error_msgs = group.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert @response.body.include?(error_msg)
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert elements.size == 2
+    end
+  end
 
   test "should destroy group" do
     assert_difference('Group.count', -1) do
