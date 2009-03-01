@@ -6,6 +6,26 @@ class GroupsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:groups)
   end
+  
+  test "index should show only ten groups at a time" do
+    get :index
+    groups = assigns(:groups)
+    assert_equal 10, groups.size
+  end
+  
+  test "index page two should show only one group" do
+    get :index, :page => 2
+    groups = assigns(:groups)
+    assert_equal 1, groups.size
+  end
+  
+  test "sort by name descending does what it says" do
+    get :index, :sort => "name_reverse"
+    groups = assigns(:groups)
+    group_names = Group.find(:all, :select => :name, :order => 'upper(name) DESC')
+    
+    assert_equal group_names.first[:name], groups.first[:name]
+  end
 
   test "should get new" do
     get :new

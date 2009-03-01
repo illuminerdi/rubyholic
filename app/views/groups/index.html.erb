@@ -1,8 +1,9 @@
 <h1>Listing groups</h1>
 
+<%= will_paginate @groups %>
 <table>
   <tr>
-    <th>Name</th>
+    <th><%= column_sort_link("Name","name") %></th>
     <th>Url</th>
     <th>Description</th>
   </tr>

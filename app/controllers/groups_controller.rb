@@ -2,7 +2,16 @@ class GroupsController < ApplicationController
   # GET /groups
   # GET /groups.xml
   def index
-    @groups = Group.find(:all)
+    if params[:sort].nil?
+      sort = 'upper(name) ASC'
+    else
+      sorting = params[:sort].split('_')
+      sort = "upper(#{sorting[0]}) "
+      sort += sorting[1].nil? ? 'ASC' : 'DESC'
+    end
+
+    @groups = Group.paginate :page => params[:page], 
+      :order => sort, :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
