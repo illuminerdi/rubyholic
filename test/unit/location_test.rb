@@ -14,6 +14,19 @@ class LocationTest < ActiveSupport::TestCase
     assert location.errors.on(:name)
   end
   
+  test "location name is distinct if address is the same" do
+    location = locations(:one)
+    location.name = locations(:two).name
+    location.address = locations(:two).name
+    
+    assert ! location.valid?
+    assert location.errors.on(:name)
+  end
+  
+  test "duplicate location name with different address" do
+    
+  end
+  
   test "location has an address" do
     location = locations(:one)
     location.address = ""
