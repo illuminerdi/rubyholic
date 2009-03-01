@@ -19,6 +19,25 @@ class LocationTest < ActiveSupport::TestCase
     location.address = ""
     
     assert ! location.valid?
-    assert location.errors.on(:name)
+    assert location.errors.on(:address)
+  end
+  
+  test "location description is not freaking huge" do
+    location = locations(:one)
+    location.notes = (0..26).map {|i| i.to_s * 72}.to_s
+    
+    assert ! location.valid?
+    assert location.errors.on(:notes)
+  end
+  
+  test "new location auto-populates long and lat" do
+    location = Location.new(
+      :name => "Cafe Migliore",
+      :address => "1215 4th Ave, Seattle, WA 98101",
+      :notes => "Large meeting table and comfortable benches. Good coffee made...okay. Nice waitstaff. Big screen television is a bit of a distraction."
+    )
+    assert location.valid?
+    assert ! location[:latitude].nil?
+    assert ! location[:longitude].nil?
   end
 end
