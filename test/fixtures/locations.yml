@@ -1,15 +1,15 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  name: MyString
-  address: MyString
-  latitude: 1.5
-  longitude: 1.5
-  notes: MyText
+  name: Tully's 4th Ave
+  address: 1401 4th Ave, Seattle, WA 98101, USA
+  latitude: 47.6092868
+  longitude: -122.3357238
+  notes: Lots of nice couches, frilly atmosphere, and okay coffee.
 
 two:
-  name: MyString
-  address: MyString
-  latitude: 1.5
-  longitude: 1.5
-  notes: MyText
+  name: Caffe Senso Unico
+  address: 622 Olive Way, Seattle, WA 98101, USA
+  latitude: 47.6132446
+  longitude: -122.3360777
+  notes: Authentic Italian Coffee and belligerent waitstaff. Short on space so not for large groups. 
