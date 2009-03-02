@@ -1,17 +1,105 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  group_id: 1
-  location_id: 1
+  group: one
+  location: one
   name: MyString
   description: MyText
   start_date: 2009-03-01
   end_date: 2009-03-01
 
 two:
-  group_id: 1
-  location_id: 1
+  group: two
+  location: two
+  name: MyString
+  description: MyText
+  start_date: 2009-03-04
+  end_date: 2009-03-04
+
+three:
+  group: three
+  location: one
+  name: MyString
+  description: MyText
+  start_date: 2009-03-03
+  end_date: 2009-03-03
+  
+four:
+  group: four
+  location: two
+  name: MyString
+  description: MyText
+  start_date: 2009-03-02
+  end_date: 2009-03-02
+  
+five:
+  group: five
+  location: one
+  name: MyString
+  description: MyText
+  start_date: 2009-03-07
+  end_date: 2009-03-07
+  
+six:
+  group: six
+  location: two
   name: MyString
   description: MyText
   start_date: 2009-03-01
   end_date: 2009-03-01
+  
+seven:
+  group: seven
+  location: one
+  name: MyString
+  description: MyText
+  start_date: 2009-03-15
+  end_date: 2009-03-15
+  
+eight:
+  group: eight
+  location: two
+  name: MyString
+  description: MyText
+  start_date: 2009-04-01
+  end_date: 2009-04-01
+  
+nine:
+  group: nine
+  location: one
+  name: MyString
+  description: MyText
+  start_date: 2009-03-21
+  end_date: 2009-03-21
+  
+ten:
+  group: ten
+  location: two
+  name: MyString
+  description: MyText
+  start_date: 2009-04-04
+  end_date: 2009-04-04
+  
+eleven:
+  group: eleven
+  location: one
+  name: MyString
+  description: MyText
+  start_date: 2009-04-02
+  end_date: 2009-04-02
+  
+twelve:
+  group: eleven
+  location: two
+  name: MyString
+  description: MyText
+  start_date: 2009-03-13
+  end_date: 2009-03-13
+  
+thirteen:
+  group: one
+  location: two
+  name: MyString
+  description: MyText
+  start_date: 2009-05-29
+  end_date: 2009-05-29
