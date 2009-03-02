@@ -9,6 +9,9 @@ class Location < ActiveRecord::Base
     
   validates_presence_of :address
   
+  has_many :events
+  has_many :groups, :through => :events
+  
   def address=(new_address)
     loc = locate(new_address)
     self.latitude = loc.lat
