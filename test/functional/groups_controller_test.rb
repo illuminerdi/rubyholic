@@ -13,18 +13,48 @@ class GroupsControllerTest < ActionController::TestCase
     assert_equal 10, groups.size
   end
   
-  test "index page two should show only one group" do
-    get :index, :page => 2
+  test "index should show locations for each group and event entry" do
+    get :index
+    assert_match /Location/, @response.body
+    assert_match /Event/, @response.body
     groups = assigns(:groups)
-    assert_equal 1, groups.size
+    groups.each {|group|
+      assert @response.body.include?(group.name)
+      assert @response.body.include?(group.location.name)
+    }
   end
   
-  test "sort by name descending does what it says" do
-    get :index, :sort => "name_reverse"
+  test "index page two should show less than 10 groups" do
+    # this is hinky. I want to test pagination and results, but 
+    # the number of groups listed will change as the requirements change.
+    # teh lamezor.
+    get :index, :page => 2
+    groups = assigns(:groups)
+    assert groups.size < 10
+  end
+  
+  test "sort by name descending does what it should" do
+    get :index, :sort => "groups_name_reverse"
     groups = assigns(:groups)
     group_names = Group.find(:all, :select => :name, :order => 'upper(name) DESC')
     
     assert_equal group_names.first[:name], groups.first[:name]
+  end
+  
+  test "sort by location does what it should" do
+    get :index, :sort => "locations_name"
+    groups = assigns(:groups)
+    location_names = Location.find(:all, :select => "name", :order => "upper(locations.name) ASC")
+    
+    assert_equal location_names.first[:name], groups.first[:location_name]
+  end
+  
+  test "sort by location descending does what it should" do
+    get :index, :sort => "locations_name_reverse"
+    groups = assigns(:groups)
+    location_names = Location.find(:all, :select => "name", :order => "upper(locations.name) ASC")
+    
+    assert_equal location_names.last[:name], groups.first[:location_name]
   end
 
   test "should get new" do

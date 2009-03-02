@@ -4,8 +4,11 @@ class Group < ActiveRecord::Base
   
   validates_length_of :description, :maximum => 255, 
     :message => "Description should be less than {{count}} characters in length"
-    
+  
+  has_one :event
   has_many :events
+  has_many :locations, :through => :events
+  has_one :location, :through => :event
     
   validates_format_of :url, 
     :with => /(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/ix,

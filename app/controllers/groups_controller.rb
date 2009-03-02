@@ -3,16 +3,17 @@ class GroupsController < ApplicationController
   # GET /groups.xml
   def index
     if params[:sort].nil?
-      sort = 'upper(name) ASC'
+      sort = 'upper(groups.name) ASC'
     else
       sorting = params[:sort].split('_')
-      sort = "upper(#{sorting[0]}) "
-      sort += sorting[1].nil? ? 'ASC' : 'DESC'
+      sort = "upper(#{sorting[0]}.#{sorting[1]}) "
+      sort += sorting[2].nil? ? 'ASC' : 'DESC'
     end
 
-    @groups = Group.paginate :page => params[:page], 
-      :order => sort, :per_page => 10
-
+    @groups = Group.paginate :page => params[:page],
+      :select => "groups.name, groups.id, events.name as event_name, locations.name as location_name",
+      :order => sort, :per_page => 10, :joins => [:locations]
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @groups }

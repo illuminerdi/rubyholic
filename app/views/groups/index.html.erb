@@ -3,16 +3,16 @@
 <%= will_paginate @groups %>
 <table>
   <tr>
-    <th><%= column_sort_link("Name","name") %></th>
-    <th>Url</th>
-    <th>Description</th>
+    <th><%= column_sort_link("Name","groups_name") %></th>
+		<th>Event</th>
+		<th><%= column_sort_link("Location","locations_name") %></th>
   </tr>
 
 <% for group in @groups %>
   <tr>
     <td><%=h group.name %></td>
-    <td><%=h group.url %></td>
-    <td><%=h group.description %></td>
+		<td><%=h group.event_name %></td>
+		<td><%=h group.location_name %></td>
     <td><%= link_to 'Show', group %></td>
     <td><%= link_to 'Edit', edit_group_path(group) %></td>
     <td><%= link_to 'Destroy', group, :confirm => 'Are you sure?', :method => :delete %></td>
