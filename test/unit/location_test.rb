@@ -17,7 +17,7 @@ class LocationTest < ActiveSupport::TestCase
   test "location name is distinct if address is the same" do
     location = locations(:one)
     location.name = locations(:two).name
-    location.address = locations(:two).name
+    location.address = locations(:two).address
     
     assert ! location.valid?
     assert location.errors.on(:name)
@@ -52,5 +52,16 @@ class LocationTest < ActiveSupport::TestCase
     assert location.valid?
     assert ! location[:latitude].nil?
     assert ! location[:longitude].nil?
+  end
+  
+  test "new location throws an appropriate error for an address that is not found" do
+    location = Location.new(
+      :name => "Cafe Migliore",
+      :address => "asd123gda$1",
+      :notes => "Large meeting table and comfortable benches. Good coffee made...okay. Nice waitstaff. Big screen television is a bit of a distraction."
+    )
+    
+    assert ! location.valid?
+    assert location.errors.on(:address)
   end
 end

@@ -2,7 +2,7 @@ class Location < ActiveRecord::Base
   GOOGLE_MAP_API_KEY = 'ABQIAAAAeB6V9etRslOYUQrgBtxDGhTJQa0g3IQ9GZqIMmInSLzwtGDKaBR_NQCgKy3xzp_0k2xgbpxONlQSSQ'
   
   validates_presence_of :name
-  validates_uniqueness_of :name, :group => "address"
+  validates_uniqueness_of :name, :scope => "address"
   
   validates_length_of :notes, :maximum => 255, 
     :message => "Location notes should be less than {{count}} characters in length"
@@ -14,6 +14,9 @@ class Location < ActiveRecord::Base
     self.latitude = loc.lat
     self.longitude = loc.lng
     write_attribute(:address, loc.full_address)
+    if loc.lat.nil?
+      errors.add(:address, "We were unable to find the address")
+    end
   end
   
   def locate(address)
