@@ -184,7 +184,10 @@ class GroupsControllerTest < ActionController::TestCase
   test "index provides link to view a specific group" do
     get :index
     group = assigns(:groups).first
-    assert_match group_path(group), @response.body
+    assert_tag :id => "a", :attributes => {
+      :href => group_path(group),
+      :child => /#{group.name}/
+    }
   end
   
   test "index does not allow edit" do
