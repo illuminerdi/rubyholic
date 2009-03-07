@@ -1,5 +1,11 @@
 <h1>Listing groups</h1>
 
+Search:
+<% form_tag groups_path, :method => :get do %>
+  <%= text_field_tag 'search_term' %>
+	<%= submit_tag 'Search', :id => 'search' %>
+<% end %>
+
 <%= will_paginate @groups %>
 <table>
   <tr>
@@ -10,12 +16,9 @@
 
 <% for group in @groups %>
   <tr>
-    <td><%=h group.name %></td>
+    <td><%= link_to group.name, group %></td>
 		<td><%=h group.event_name %></td>
 		<td><%=h group.location_name %></td>
-    <td><%= link_to 'Show', group %></td>
-    <td><%= link_to 'Edit', edit_group_path(group) %></td>
-    <td><%= link_to 'Destroy', group, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
