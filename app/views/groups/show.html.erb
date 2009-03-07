@@ -1,18 +1,53 @@
-<p>
-  <b>Name:</b>
-  <%=h @group.name %>
-</p>
+<div>
+	<%= @group.name %>
+</div>
 
-<p>
-  <b>Url:</b>
-  <%=h @group.url %>
-</p>
+<table border="1">
+	<tr>
+		<td>
+      <div>Website: <%= link_to @group.url, @group.url %></div>
+			<div>Description:<br/><%= @group.description %></div>
+    </td>
+		<td>this is where the map will live</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<table style="width: 100%;">
+        <tr>
+        	<td>Events</td>
+        </tr>
+				<tr>
+					<th>Event Name</th>
+					<th>Start Date</th>
+					<th>End Date</th>
+					<th>Location</th>
+					<th>Address</th>
+				</tr>
+			  <% @group.events.each do |event| %>
+			    <tr class="<%= cycle('list-line-odd', 'list-line-even') %>">
+			    	<td><%= event.name %></td>
+            <td><%= event.start_date %></td>
+            <td><%= event.end_date %></td>
+			      <td><%= event.location.name %></td>
+			      <td><%= event.location.address %></td>
+			    </tr>
+				<% end %>
+			</table>
+    </td>
+</table>
 
-<p>
-  <b>Description:</b>
-  <%=h @group.description %>
-</p>
-
-
-<%= link_to 'Edit', edit_group_path(@group) %> |
-<%= link_to 'Back', groups_path %>
+<table id="group_controls">
+  <tr>
+  	<td>
+  		<%= link_to 'Previous', group_path(@prev_group) %> / 
+		  <%= link_to 'Next', group_path(@next_group) %>
+		</td>
+		<td>
+			<%= link_to 'Edit', edit_group_path(@group) %> |
+			<%= link_to 'Back', groups_path %>
+		</td>
+		<td>
+			<%= link_to "Create New Event", new_event_path %>
+		</td>
+	</tr>
+</table>

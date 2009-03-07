@@ -215,7 +215,8 @@ class GroupsControllerTest < ActionController::TestCase
     events = groups(:one).events
     events.each do |event|
       assert_match event.name, @response.body
-      assert_match event.description, @response.body
+      assert_match event.start_date.to_s, @response.body
+      assert_match event.end_date.to_s, @response.body
       assert_match event.location.address, @response.body
       assert_match event.location.name, @response.body
     end
