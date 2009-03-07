@@ -178,7 +178,19 @@ class GroupsControllerTest < ActionController::TestCase
   
   test "index has a 'new group' link" do
     get :index
-    assert_match /\/groups\/new/, @response.body
+    assert_match new_group_path, @response.body
+  end
+  
+  test "index provides link to view a specific group" do
+    get :index
+    group = assigns(:groups).first
+    assert_match group_path(group), @response.body
+  end
+  
+  test "index does not allow edit" do
+    get :index
+    group = assigns(:groups).first
+    assert ! @response.body.match(edit_group_path(group))
   end
   
   test "index has a search box" do
