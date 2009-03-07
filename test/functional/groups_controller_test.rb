@@ -191,15 +191,49 @@ class GroupsControllerTest < ActionController::TestCase
     assert_match /<a href="#{group_path(group)}">#{group.name}/, @response.body
   end
   
+  test "index has a search box" do
+    get :index
+    assert_tag :tag => 'input', :attributes => {:id => 'search_term'}
+    assert_tag :tag => 'input', :attributes => {:id => 'search'}
+  end
+  
   test "index does not allow edit" do
     get :index
     group = assigns(:groups).first
     assert ! @response.body.match(edit_group_path(group))
   end
   
-  test "index has a search box" do
-    get :index
-    assert_tag :tag => 'input', :attributes => {:id => 'search_term'}
-    assert_tag :tag => 'input', :attributes => {:id => 'search'}
+  test "show displays basic group information" do
+    get :show, :id => groups(:one).id
+    assert_match groups(:one).name, @response.body
+    assert_match groups(:one).url, @response.body
+    assert_match groups(:one).description, @response.body
+  end
+  
+  test "show displays all of the events for the group" do
+    get :show, :id => groups(:one).id
+    events = groups(:one).events
+    events.each do |event|
+      assert_match event.name, @response.body
+      assert_match event.description, @response.body
+      assert_match event.location.address, @response.body
+      assert_match event.location.name, @response.body
+    end
+  end
+  
+  test "show displays links to next and previous group" do
+    get :show, :id => groups(:one).id
+    group = assigns(:group)
+    groups = Group.find(:all, :order => 'UPPER(groups.name) ASC')
+    g_index = groups.index(group)
+    assert_match /<a href="#{group_path(groups[g_index-1])}">Previous/, 
+      @response.body
+    assert_match /<a href="#{group_path(groups[g_index+1])}">Next/, 
+      @response.body
+  end
+  
+  test "show displays link to add a new event" do
+    get :show, :id => groups(:one).id
+    assert_match new_event_path, @response.body
   end
 end
