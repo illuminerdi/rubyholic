@@ -176,6 +176,11 @@ class GroupsControllerTest < ActionController::TestCase
     assert_redirected_to groups_path
   end
   
+  test "index has a 'new group' link" do
+    get :index
+    assert_match /\/groups\/new/, @response.body
+  end
+  
   test "index has a search box" do
     get :index
     assert_tag :tag => 'input', :attributes => {:id => 'search_term'}
