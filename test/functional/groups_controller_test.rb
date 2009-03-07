@@ -175,4 +175,10 @@ class GroupsControllerTest < ActionController::TestCase
 
     assert_redirected_to groups_path
   end
+  
+  test "index has a search box" do
+    get :index
+    assert_tag :tag => 'input', :attributes => {:id => 'search_term'}
+    assert_tag :tag => 'input', :attributes => {:id => 'search'}
+  end
 end
