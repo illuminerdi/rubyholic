@@ -1,6 +1,9 @@
 require 'test_helper'
 
 class GroupsControllerTest < ActionController::TestCase
+
+  # testing the 'index' page features.
+  #
   test "should get index" do
     get :index
     assert_response :success
@@ -57,125 +60,6 @@ class GroupsControllerTest < ActionController::TestCase
     assert_equal location_names.last[:name], groups.first[:location_name]
   end
 
-  test "should get new" do
-    get :new
-    assert_response :success
-    assert_tag :tag => 'input', :attributes => {
-      :name => 'group[name]'
-    }
-    assert_tag :tag => 'input', :attributes => {
-      :name => 'group[url]'
-    }
-    assert_tag :tag => 'textarea', :attributes => {
-      :name => 'group[description]'
-    }
-  end
-
-  test "should create group" do
-    assert_difference('Group.count') do
-      post :create, :group => {
-        :name => "test_group_new",
-        :url => "http://www.google.com",
-        :description => "testing"
-      }
-    end
-
-    assert_redirected_to group_path(assigns(:group))
-  end
-
-  test "should show group" do
-    get :show, :id => groups(:one).id
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get :edit, :id => groups(:one).id
-    assert_response :success
-    assert_tag :tag => 'input', :attributes => {
-      :name => 'group[name]'
-    }
-    assert_tag :tag => 'input', :attributes => {
-      :name => 'group[url]'
-    }
-    assert_tag :tag => 'textarea', :attributes => {
-      :name => 'group[description]'
-    }
-  end
-
-  test "should update group" do
-    put :update, :id => groups(:one).id, :group => { }
-    assert_redirected_to group_path(assigns(:group))
-  end
-  
-  test "should throw error on duplicate group name" do
-    put :update, :id => groups(:one).id, :group => {
-      :name => groups(:two).name
-    }
-    assert_response :success
-    group = assigns(:group)
-    assert ! group.valid?
-    assert group.errors.size == 1
-    error_msgs = group.errors.full_messages
-    error_msgs.each do |error_msg|
-      assert @response.body.include?(error_msg)
-    end
-    assert_select "div.fieldWithErrors" do |elements|
-      assert elements.size == 2
-    end
-  end
-  
-  test "should allow no url" do
-    put :create, :group => {
-      :name => "foo",
-      :url => "",
-      :description => "In this day an age - a new group with no URL."
-    }
-    assert_redirected_to group_path(assigns(:group))
-    
-  end
-  
-  test "should throw error on bad url" do
-    put :update, :id => groups(:one).id, :group => {
-      :url => "asdf"
-    }
-    assert_response :success
-    group = assigns(:group)
-    assert ! group.valid?
-    assert group.errors.size == 1
-    error_msgs = group.errors.full_messages
-    error_msgs.each do |error_msg|
-      assert @response.body.include?(error_msg)
-    end
-    assert_select "div.fieldWithErrors" do |elements|
-      assert elements.size == 2
-    end
-  end
-  
-  test "should throw error with stupid-big description" do
-    put :update, :id => groups(:one).id, :group => {
-      :description => (0..26).map {|i| i.to_s * 72}.to_s
-    }
-    assert_response :success
-    group = assigns(:group)
-    assert ! group.valid?
-    assert group.errors.size == 1
-    error_msgs = group.errors.full_messages
-    error_msgs.each do |error_msg|
-      assert @response.body.include?(error_msg)
-    end
-    assert_select "div.fieldWithErrors" do |elements|
-      assert elements.size == 2
-    end
-  end
-
-  test "should destroy group" do
-    assert_difference('Group.count', -1) do
-      delete :destroy, :id => groups(:one).id
-    end
-
-    assert_redirected_to groups_path
-  end
-  
   test "index has a 'new group' link" do
     get :index
     assert_match new_group_path, @response.body
@@ -201,6 +85,252 @@ class GroupsControllerTest < ActionController::TestCase
     get :index
     group = assigns(:groups).first
     assert ! @response.body.match(edit_group_path(group))
+  end
+  
+  # testing the 'new' method
+  #
+  test "should get new" do
+    get :new
+    assert_response :success
+    assert_tag :tag => 'input', :attributes => {
+      :name => 'group[name]'
+    }
+    assert_tag :tag => 'input', :attributes => {
+      :name => 'group[url]'
+    }
+    assert_tag :tag => 'textarea', :attributes => {
+      :name => 'group[description]'
+    }
+  end
+  
+  # testing the 'create' method
+  #
+  test "should create group" do
+    assert_difference('Group.count') do
+      post :create, :group => {
+        :name => "test_group_new",
+        :url => "http://www.google.com",
+        :description => "testing"
+      }
+    end
+
+    assert_redirected_to group_path(assigns(:group))
+  end
+  
+  test "create should allow no url" do
+    post :create, :group => {
+      :name => "foo",
+      :url => "",
+      :description => "In this day an age - a new group with no URL."
+    }
+    assert_redirected_to group_path(assigns(:group))
+  end
+  
+  test "create should allow no description" do
+    post :create, :group => {
+      :name => "Group with no Description",
+      :url => "http://www.thefaceless.com",
+      :description => ""
+    }
+    assert_redirected_to group_path(assigns(:group))
+  end
+  
+  test "create throws error on bad url" do
+    post :create, :group => {
+      :name => "foo",
+      :url => "asdf",
+      :description => "test description for bad url group."
+    }
+    assert_response :success
+    group = assigns(:group)
+    assert ! group.valid?
+    assert group.errors.size == 1
+    error_msgs = group.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert @response.body.include?(error_msg)
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert elements.size == 2
+    end
+  end
+  
+  test "create throws error with no name" do
+    post :create, :group => {
+      :name => "",
+      :url => "http://www.google.com",
+      :description => "test description for no name group."
+    }
+    assert_response :success
+    group = assigns(:group)
+    assert ! group.valid?
+    assert group.errors.size == 1
+    error_msgs = group.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert @response.body.include?(error_msg)
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert elements.size == 2
+    end
+  end
+  
+  test "create throws error on duplicate name" do
+    post :create, :group => {
+      :name => groups(:one).name,
+      :url => "http://www.google.com",
+      :description => "test description for duplicate name group."
+    }
+    assert_response :success
+    group = assigns(:group)
+    assert ! group.valid?
+    assert group.errors.size == 1
+    error_msgs = group.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert @response.body.include?(error_msg)
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert elements.size == 2
+    end
+  end
+  
+  test "create throws error on stupid-big group description" do
+    post :create, :group => {
+      :name => "Big Description Group",
+      :url => "http://www.fark.com",
+      :description => (0..26).map {|i| i.to_s * 72}.to_s
+    }
+    assert_response :success
+    group = assigns(:group)
+    assert ! group.valid?
+    assert group.errors.size == 1
+    error_msgs = group.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert @response.body.include?(error_msg)
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert elements.size == 2
+    end
+  end
+
+  # testing the 'edit' method
+  #
+  test "should get edit" do
+    get :edit, :id => groups(:one).id
+    assert_response :success
+    assert_tag :tag => 'input', :attributes => {
+      :name => 'group[name]'
+    }
+    assert_tag :tag => 'input', :attributes => {
+      :name => 'group[url]'
+    }
+    assert_tag :tag => 'textarea', :attributes => {
+      :name => 'group[description]'
+    }
+  end
+
+  # testing the 'update' method
+  #
+  test "should update group" do
+    put :update, :id => groups(:one).id, :group => { }
+    assert_redirected_to group_path(assigns(:group))
+  end
+  
+  test "update should throw error on duplicate group name" do
+    put :update, :id => groups(:one).id, :group => {
+      :name => groups(:two).name
+    }
+    assert_response :success
+    group = assigns(:group)
+    assert ! group.valid?
+    assert group.errors.size == 1
+    error_msgs = group.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert @response.body.include?(error_msg)
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert elements.size == 2
+    end
+  end
+  
+  test "update should throw error on bad url" do
+    put :update, :id => groups(:one).id, :group => {
+      :url => "asdf"
+    }
+    assert_response :success
+    group = assigns(:group)
+    assert ! group.valid?
+    assert group.errors.size == 1
+    error_msgs = group.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert @response.body.include?(error_msg)
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert elements.size == 2
+    end
+  end
+  
+  test "update should throw error with stupid-big description" do
+    put :update, :id => groups(:one).id, :group => {
+      :description => (0..26).map {|i| i.to_s * 72}.to_s
+    }
+    assert_response :success
+    group = assigns(:group)
+    assert ! group.valid?
+    assert group.errors.size == 1
+    error_msgs = group.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert @response.body.include?(error_msg)
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert elements.size == 2
+    end
+  end
+  
+  test "update should throw error on missing group name" do
+    put :update, :id => groups(:one).id, :group => {
+      :name => ""
+    }
+    assert_response :success
+    group = assigns(:group)
+    assert ! group.valid?
+    assert group.errors.size == 1
+    error_msgs = group.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert @response.body.include?(error_msg)
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert elements.size == 2
+    end
+  end
+  
+  test "update should allow no url" do
+    put :update, :id => groups(:one).id, :group => {
+      :url => ""
+    }
+    assert_redirected_to group_path(groups(:one))
+  end
+  
+  test "update should allow no description" do
+    put :update, :id => groups(:one).id, :group => {
+      :description => ""
+    }
+    assert_redirected_to group_path(groups(:one))
+  end
+  
+  # testing the 'destroy' method
+  #
+  test "should destroy group" do
+    assert_difference('Group.count', -1) do
+      delete :destroy, :id => groups(:one).id
+    end
+
+    assert_redirected_to groups_path
+  end
+  
+  # testing the 'show' page features
+  #
+  test "should show group" do
+    get :show, :id => groups(:one).id
+    assert_response :success
   end
   
   test "show displays basic group information" do
