@@ -2,10 +2,6 @@ require 'test_helper'
 require 'flexmock/test_unit'
 
 class LocationTest < ActiveSupport::TestCase
-  # Replace this with your real tests.
-  test "the truth" do
-    assert true
-  end
   
   test "location has a name" do
     location = locations(:one)
@@ -15,20 +11,37 @@ class LocationTest < ActiveSupport::TestCase
     assert location.errors.on(:name)
   end
   
-  test "location name is distinct if address is the same" do
+  test "flexmock doesnt piss me off anymore" do
+    address = locations(:one).address
+    mock_geo(address, stub_geo_success(address))
     location = locations(:one)
-    location.name = locations(:two).name
+    location.address = locations(:one).address
+    
+    assert location.valid?
+  end
+  
+  test "location name is distinct if address is the same" do
+    address = locations(:two).address
+    mock_geo(address, stub_geo_success(address))
+    location = locations(:one)
     location.address = locations(:two).address
+    location.name = locations(:two).name
     
     assert ! location.valid?
     assert location.errors.on(:name)
   end
   
   test "duplicate location name with different address" do
+    address = locations(:two).address
+    mock_geo(address, stub_geo_success(address))
+    location = locations(:one)
+    location.address = locations(:two).address
     
+    assert location.valid?
   end
   
   test "location has an address" do
+    mock_geo("", stub_geo_failure)
     location = locations(:one)
     location.address = ""
     
@@ -45,6 +58,8 @@ class LocationTest < ActiveSupport::TestCase
   end
   
   test "new location auto-populates long and lat" do
+    address = "1215 4th Ave, Seattle, WA 98101"
+    mock_geo(address,stub_geo_success(address))
     location = Location.new(
       :name => "Cafe Migliore",
       :address => "1215 4th Ave, Seattle, WA 98101",
@@ -56,6 +71,8 @@ class LocationTest < ActiveSupport::TestCase
   end
   
   test "new location throws an appropriate error for an address that is not found" do
+    mock_geo("asd123gda$1",stub_geo_failure)
+    
     location = Location.new(
       :name => "Cafe Migliore",
       :address => "asd123gda$1",
@@ -64,5 +81,25 @@ class LocationTest < ActiveSupport::TestCase
     
     assert ! location.valid?
     assert location.errors.on(:address)
+  end
+  
+  def stub_geo_success(address)
+    geocode_payload = GeoKit::GeoLoc.new(:lat => 123.456, :lng => 123.456)  
+    geocode_payload.success = true
+    geocode_payload.full_address = address
+    geocode_payload
+  end
+  
+  def stub_geo_failure
+    geocode_payload = GeoKit::GeoLoc.new(:lat => nil, :lng => nil)  
+    geocode_payload.success = false
+    geocode_payload.full_address = ""
+    geocode_payload
+  end
+  
+  def mock_geo(address, geo_obj)
+    flexmock(Geokit::Geocoders::GoogleGeocoder).
+      should_receive(:geocode).with(address).once.
+      and_return(geo_obj)
   end
 end
