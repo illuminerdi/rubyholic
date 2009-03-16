@@ -24,9 +24,9 @@ class GroupsController < ApplicationController
   # GET /groups/1.xml
   def show
     @group = Group.find(params[:id])
-    groups = Group.find(:all, :order => 'UPPER(groups.name) ASC')
+    groups = Group.find(:all, :select => "id", :order => 'UPPER(groups.name) ASC')
     g_index = groups.index(@group)
-    @next_group = groups[g_index+1]
+    @next_group = groups[g_index+1] || groups[0] 
     @prev_group = groups[g_index-1]
 
     respond_to do |format|
