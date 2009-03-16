@@ -68,10 +68,6 @@ class GroupsControllerTest < ActionController::TestCase
   test "index provides link to view a specific group" do
     get :index
     group = assigns(:groups).first
-    #assert_tag :tag => "a", :attributes => {
-    #  :href => group_path(group),
-    #   :content => /#{group.name}/
-    #}
     assert_match /<a href="#{group_path(group)}">#{group.name}/, @response.body
   end
   
@@ -83,8 +79,10 @@ class GroupsControllerTest < ActionController::TestCase
   
   test "index does not allow edit" do
     get :index
-    group = assigns(:groups).first
-    assert ! @response.body.match(edit_group_path(group))
+    groups = assigns(:groups)
+    groups.each do |group|
+      assert ! @response.body.match(edit_group_path(group))
+    end
   end
   
   # testing the 'new' method
