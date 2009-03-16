@@ -27,7 +27,7 @@ class LocationsControllerTest < ActionController::TestCase
 
   test "should create location" do
     address = "1215 4th Ave, Seattle, WA 98101"
-    mock_geo(address, stub_geo_success(address))
+    mock_geo(address)
     assert_difference('Location.count') do
       post :create, :location => {
         :name => "Cafe Migliore",
@@ -41,7 +41,7 @@ class LocationsControllerTest < ActionController::TestCase
   
   test "should fail without name" do
     address = "1215 4th Ave, Seattle, WA 98101"
-    mock_geo(address, stub_geo_success(address))
+    mock_geo(address)
     post :create, :location => {
         :name => "",
         :address => address,
@@ -63,7 +63,7 @@ class LocationsControllerTest < ActionController::TestCase
   
   test "should not fail with duplicate name but different address" do
     address = "1215 4th Ave, Seattle, WA 98101"
-    mock_geo(address, stub_geo_success(address))
+    mock_geo(address)
     post :create, :location => {
         :name => locations(:one).name,
         :address => address,
@@ -75,7 +75,7 @@ class LocationsControllerTest < ActionController::TestCase
   
   test "should fail with duplicate name and address combo" do
     address = locations(:one).address
-    mock_geo(address, stub_geo_success(address))
+    mock_geo(address)
     post :create, :location => {
         :name => locations(:one).name,
         :address => address,
@@ -97,7 +97,7 @@ class LocationsControllerTest < ActionController::TestCase
   
   test "should fail with super-long notes" do
     address = "1215 4th Ave, Seattle, WA 98101"
-    mock_geo(address, stub_geo_success(address))
+    mock_geo(address)
     post :create, :location => {
         :name => "Migliore",
         :address => address,

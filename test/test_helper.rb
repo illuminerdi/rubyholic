@@ -50,7 +50,8 @@ class Test::Unit::TestCase
     geocode_payload
   end
   
-  def mock_geo(address, geo_obj)
+  def mock_geo(address, succeed = true)
+    geo_obj = succeed ? stub_geo_success(address) : stub_geo_failure
     flexmock(Geokit::Geocoders::GoogleGeocoder).
       should_receive(:geocode).with(address).once.
       and_return(geo_obj)

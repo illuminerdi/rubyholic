@@ -13,7 +13,7 @@ class LocationTest < ActiveSupport::TestCase
   
   test "flexmock doesnt piss me off anymore" do
     address = locations(:one).address
-    mock_geo(address, stub_geo_success(address))
+    mock_geo(address)
     location = locations(:one)
     location.address = locations(:one).address
     
@@ -22,7 +22,7 @@ class LocationTest < ActiveSupport::TestCase
   
   test "location name is distinct if address is the same" do
     address = locations(:two).address
-    mock_geo(address, stub_geo_success(address))
+    mock_geo(address)
     location = locations(:one)
     location.address = locations(:two).address
     location.name = locations(:two).name
@@ -33,7 +33,7 @@ class LocationTest < ActiveSupport::TestCase
   
   test "duplicate location name with different address" do
     address = locations(:two).address
-    mock_geo(address, stub_geo_success(address))
+    mock_geo(address)
     location = locations(:one)
     location.address = locations(:two).address
     
@@ -41,7 +41,7 @@ class LocationTest < ActiveSupport::TestCase
   end
   
   test "location has an address" do
-    mock_geo("", stub_geo_failure)
+    mock_geo("", false)
     location = locations(:one)
     location.address = ""
     
@@ -59,7 +59,7 @@ class LocationTest < ActiveSupport::TestCase
   
   test "new location auto-populates long and lat" do
     address = "1215 4th Ave, Seattle, WA 98101"
-    mock_geo(address,stub_geo_success(address))
+    mock_geo(address)
     location = Location.new(
       :name => "Cafe Migliore",
       :address => "1215 4th Ave, Seattle, WA 98101",
@@ -71,7 +71,7 @@ class LocationTest < ActiveSupport::TestCase
   end
   
   test "new location throws an appropriate error for an address that is not found" do
-    mock_geo("asd123gda$1",stub_geo_failure)
+    mock_geo("asd123gda$1",false)
     
     location = Location.new(
       :name => "Cafe Migliore",
