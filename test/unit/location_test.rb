@@ -82,24 +82,4 @@ class LocationTest < ActiveSupport::TestCase
     assert ! location.valid?
     assert location.errors.on(:address)
   end
-  
-  def stub_geo_success(address)
-    geocode_payload = GeoKit::GeoLoc.new(:lat => 123.456, :lng => 123.456)  
-    geocode_payload.success = true
-    geocode_payload.full_address = address
-    geocode_payload
-  end
-  
-  def stub_geo_failure
-    geocode_payload = GeoKit::GeoLoc.new(:lat => nil, :lng => nil)  
-    geocode_payload.success = false
-    geocode_payload.full_address = ""
-    geocode_payload
-  end
-  
-  def mock_geo(address, geo_obj)
-    flexmock(Geokit::Geocoders::GoogleGeocoder).
-      should_receive(:geocode).with(address).once.
-      and_return(geo_obj)
-  end
 end
