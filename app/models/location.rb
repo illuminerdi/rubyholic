@@ -8,8 +8,6 @@ class Location < ActiveRecord::Base
     :message => "Location notes should be less than {{count}} characters in length"
     
   validates_presence_of :address
-  validates_presence_of :latitude
-  validates_presence_of :longitude
   
   has_many :events
   has_many :groups, :through => :events
