@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'flexmock/test_unit'
 
 class LocationsControllerTest < ActionController::TestCase
   test "should get index" do
@@ -25,10 +26,12 @@ class LocationsControllerTest < ActionController::TestCase
   end
 
   test "should create location" do
+    address = "1215 4th Ave, Seattle, WA 98101"
+    mock_geo(address, stub_geo_success(address))
     assert_difference('Location.count') do
       post :create, :location => {
         :name => "Cafe Migliore",
-        :address => "1215 4th Ave, Seattle, WA 98101",
+        :address => address,
         :notes => "Large meeting table and comfortable benches. Good coffee made...okay. Nice waitstaff. Big screen television is a bit of a distraction."
       }
     end
@@ -37,9 +40,11 @@ class LocationsControllerTest < ActionController::TestCase
   end
   
   test "should fail without name" do
+    address = "1215 4th Ave, Seattle, WA 98101"
+    mock_geo(address, stub_geo_success(address))
     post :create, :location => {
         :name => "",
-        :address => "1215 4th Ave, Seattle, WA 98101",
+        :address => address,
         :notes => "Large meeting table and comfortable benches. Good coffee made...okay. Nice waitstaff. Big screen television is a bit of a distraction."
     }
     
@@ -57,9 +62,11 @@ class LocationsControllerTest < ActionController::TestCase
   end
   
   test "should not fail with duplicate name but different address" do
+    address = "1215 4th Ave, Seattle, WA 98101"
+    mock_geo(address, stub_geo_success(address))
     post :create, :location => {
         :name => locations(:one).name,
-        :address => "1215 4th Ave, Seattle, WA 98101",
+        :address => address,
         :notes => ""
     }
     
@@ -67,9 +74,11 @@ class LocationsControllerTest < ActionController::TestCase
   end
   
   test "should fail with duplicate name and address combo" do
+    address = locations(:one).address
+    mock_geo(address, stub_geo_success(address))
     post :create, :location => {
         :name => locations(:one).name,
-        :address => locations(:one).address,
+        :address => address,
         :notes => ""
     }
     
@@ -87,9 +96,11 @@ class LocationsControllerTest < ActionController::TestCase
   end
   
   test "should fail with super-long notes" do
+    address = "1215 4th Ave, Seattle, WA 98101"
+    mock_geo(address, stub_geo_success(address))
     post :create, :location => {
         :name => "Migliore",
-        :address => "1215 4th Ave, Seattle, WA 98101",
+        :address => address,
         :notes => (0..26).map {|i| i.to_s * 72}.to_s
     }
     
