@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'flexmock/test_unit'
 
 class LocationTest < ActiveSupport::TestCase
   # Replace this with your real tests.
