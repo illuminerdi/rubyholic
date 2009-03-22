@@ -36,24 +36,13 @@ class Test::Unit::TestCase
 
   # Add more helper methods to be used by all tests here...
   
-  def stub_geo_success(address)
-    geocode_payload = GeoKit::GeoLoc.new(:lat => 123.456, :lng => 123.456)  
-    geocode_payload.success = true
-    geocode_payload.full_address = address
-    geocode_payload
-  end
-  
-  def stub_geo_failure
-    geocode_payload = GeoKit::GeoLoc.new(:lat => nil, :lng => nil)  
-    geocode_payload.success = false
-    geocode_payload.full_address = ""
-    geocode_payload
-  end
-  
   def mock_geo(address, succeed = true)
-    geo_obj = succeed ? stub_geo_success(address) : stub_geo_failure
+    latlng = succeed ? {:lat => 123.456, :lng => 123.456} : {:lat => nil, :lng => nil}
+    geocode_payload = GeoKit::GeoLoc.new(latlng)
+    geocode_payload.success = succeed
+    geocode_payload.full_address = address
     flexmock(Geokit::Geocoders::GoogleGeocoder).
       should_receive(:geocode).with(address).once.
-      and_return(geo_obj)
+      and_return(geocode_payload)
   end
 end
