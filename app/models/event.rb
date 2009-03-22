@@ -3,6 +3,7 @@ class Event < ActiveRecord::Base
   validates_presence_of :name, :description, :group_id, :location_id, :start_date, :end_date
   
   validate :location_is_free_those_days
+  validate :start_is_on_or_before_end
   
   belongs_to :group
   belongs_to :location
@@ -23,5 +24,11 @@ class Event < ActiveRecord::Base
       ).size
     }
     errors.add(:location, "This location already has an event scheduled for the dates chosen.") if conflicts > 0
+  end
+  
+  def start_is_on_or_before_end
+    return if self.start_date.nil?
+    return if self.end_date.nil?
+    errors.add(:start_date, "must occur on or before the End Date.") if self.start_date > self.end_date
   end
 end

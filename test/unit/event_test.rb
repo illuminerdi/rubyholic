@@ -59,4 +59,12 @@ class EventTest < ActiveSupport::TestCase
     assert ! event.valid?
     assert event.errors.on(:location)
   end
+  
+  test "event start date happens before or on end date" do
+    event = events(:one)
+    event.start_date = event.end_date + 1
+    
+    assert ! event.valid?
+    assert event.errors.on(:start_date)
+  end
 end
