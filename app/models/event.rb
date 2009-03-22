@@ -18,6 +18,7 @@ class Event < ActiveRecord::Base
     (start..stop).each {|day|
       conflicts += Event.find(
         :all, 
+        :select => "id",
         :conditions => ["start_date <= ? and end_date >= ? and location_id = ? and id <> ?", day, day, self.location_id, self.id]
       ).size
     }
