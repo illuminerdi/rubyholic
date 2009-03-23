@@ -361,6 +361,17 @@ class GroupsControllerTest < ActionController::TestCase
       @response.body
   end
   
+  test "show displays the google maps div and sends the information to be mapped" do
+    get :show, :id => groups(:one).id
+    group = assigns(:group)
+    assert_match /<div id="map_canvas"/, @response.body
+    group.events.each do |event|
+      assert_match /GLatLng\(#{event.location.latitude}, #{event.location.longitude}\)/, @response.body
+    end
+    # and make sure we're actually displaying the map
+    assert_match /map.setUIToDefault\(\);/, @response.body
+  end
+  
   test "show displays link to add a new event" do
     get :show, :id => groups(:one).id
     assert_match new_event_path, @response.body
