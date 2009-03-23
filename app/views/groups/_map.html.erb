@@ -1,0 +1,18 @@
+
+<div id="map_canvas" style="width: 620px; height: 500px;"></div>
+
+<script language="JavaScript" type="text/javascript">
+	function initialize() {
+	  var map = new GMap2(document.getElementById("map_canvas"));
+		map.setCenter(new GLatLng(<%= map.first.location.latitude %>, <%= map.first.location.longitude %>), 13);
+		
+		<% map.each do |marker| %>
+		  var point = new GLatLng(<%= marker.location.latitude %>, <%= marker.location.longitude %>);
+			marker = new GMarker(point);
+			map.addOverlay(marker); 
+			<% loc_name = marker.location.name.gsub(/[']/, '\\\\\'') %>
+			marker.bindInfoWindowHtml('<div>Event: <%= marker.name %><br/>Location: <%= loc_name %><br/>Address: <%= marker.location.address %><br/><%= "#{marker.start_date} -- #{marker.end_date}" %></div>');
+		<% end %>
+	  map.setUIToDefault();
+	}
+</script>
