@@ -17,13 +17,18 @@ class Event < ActiveRecord::Base
     stop = self.end_date
     conflicts = 0
     (start..stop).each {|day|
+      begin
+        Event.find(self.id)
+        conditions = ["? between start_date and end_date and location_id = ? and id <> ?", day, self.location_id, self.id]
+      rescue
+        conditions = ["? between start_date and end_date and location_id = ?", day, self.location_id]
+      end
       conflicts += Event.find(
         :all, 
-        :select => "id",
-        :conditions => ["start_date <= ? and end_date >= ? and location_id = ? and id <> ?", day, day, self.location_id, self.id]
+        :conditions => conditions 
       ).size
     }
-    errors.add(:location, "This location already has an event scheduled for the dates chosen.") if conflicts > 0
+    errors.add(:location_id, "already has an event scheduled for the dates chosen.") if conflicts > 0
   end
   
   def start_is_on_or_before_end
