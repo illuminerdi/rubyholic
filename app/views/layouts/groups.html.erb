@@ -6,8 +6,17 @@
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <title>Groups: <%= controller.action_name %></title>
   <%= stylesheet_link_tag 'scaffold' %>
+	
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true_or_false
+	  &amp;key=ABQIAAAAeB6V9etRslOYUQrgBtxDGhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxT-Iw5nT2eQyA3kcZs2T7oq4-5HQA"
+	  type="text/javascript">
+	</script>
 </head>
-<body>
+<% if controller.action_name == "show" then %>
+  <body onload="initialize();" onunload="GUnload();">
+<% else %>
+  <body>
+<% end %>
 
 <p style="color: green"><%= flash[:notice] %></p>
 
