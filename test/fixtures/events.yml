@@ -3,103 +3,103 @@
 one:
   group: one
   location: one
-  name: MyString
-  description: MyText
+  name: MyString1
+  description: MyText1
   start_date: 2009-03-01
   end_date: 2009-03-01
 
 two:
   group: two
   location: two
-  name: MyString
-  description: MyText
+  name: MyString2
+  description: MyText2
   start_date: 2009-03-04
   end_date: 2009-03-04
 
 three:
   group: three
   location: one
-  name: MyString
-  description: MyText
+  name: MyString3
+  description: MyText3
   start_date: 2009-03-03
   end_date: 2009-03-03
   
 four:
   group: four
   location: two
-  name: MyString
-  description: MyText
+  name: MyString4
+  description: MyText4
   start_date: 2009-03-02
   end_date: 2009-03-02
   
 five:
   group: five
   location: one
-  name: MyString
-  description: MyText
+  name: MyString5
+  description: MyText5
   start_date: 2009-03-07
   end_date: 2009-03-07
   
 six:
   group: six
   location: two
-  name: MyString
-  description: MyText
+  name: MyString6
+  description: MyText6
   start_date: 2009-03-01
   end_date: 2009-03-01
   
 seven:
   group: seven
   location: one
-  name: MyString
-  description: MyText
+  name: MyString7
+  description: MyText7
   start_date: 2009-03-15
   end_date: 2009-03-15
   
 eight:
   group: eight
   location: two
-  name: MyString
-  description: MyText
+  name: MyString8
+  description: MyText8
   start_date: 2009-04-01
   end_date: 2009-04-01
   
 nine:
   group: nine
   location: one
-  name: MyString
-  description: MyText
+  name: MyString9
+  description: MyText9
   start_date: 2009-03-21
   end_date: 2009-03-21
   
 ten:
   group: ten
   location: two
-  name: MyString
-  description: MyText
+  name: MyString10
+  description: MyText10
   start_date: 2009-04-04
   end_date: 2009-04-04
   
 eleven:
   group: eleven
   location: one
-  name: MyString
-  description: MyText
+  name: MyString11
+  description: MyText11
   start_date: 2009-04-02
   end_date: 2009-04-02
   
 twelve:
   group: eleven
   location: two
-  name: MyString
-  description: MyText
+  name: MyString12
+  description: MyText12
   start_date: 2009-03-13
   end_date: 2009-03-13
   
 thirteen:
   group: one
   location: two
-  name: MyString
-  description: MyText
+  name: MyString13
+  description: MyText13
   start_date: 2009-05-29
   end_date: 2009-05-29
