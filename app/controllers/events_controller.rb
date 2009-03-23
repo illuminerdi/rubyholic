@@ -25,6 +25,8 @@ class EventsController < ApplicationController
   # GET /events/new.xml
   def new
     @event = Event.new
+    @groups = Group.find(:all, :select => "id, name", :order => "upper(name) asc")
+    @locations = Location.find(:all, :select => "id, name", :order => "upper(name) asc")
 
     respond_to do |format|
       format.html # new.html.erb
@@ -35,6 +37,8 @@ class EventsController < ApplicationController
   # GET /events/1/edit
   def edit
     @event = Event.find(params[:id])
+    @groups = Group.find(:all, :select => "id, name", :order => "upper(name) asc")
+    @locations = Location.find(:all, :select => "id, name", :order => "upper(name) asc")
   end
 
   # POST /events
