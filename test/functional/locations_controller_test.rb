@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'flexmock/test_unit'
 
 class LocationsControllerTest < ActionController::TestCase
   
