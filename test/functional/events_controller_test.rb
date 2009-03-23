@@ -312,6 +312,138 @@ class EventsControllerTest < ActionController::TestCase
     
     assert_redirected_to event_path(assigns(:event))
   end
+  
+  test "should not allow blank name on update event" do
+    post :update, :id => events(:one).id, :event => { :name => "" }
+    
+    assert_response :success
+    event = assigns(:event)
+    assert ! event.valid?
+    assert_equal 1, event.errors.size
+    error_msgs = event.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert_match error_msg, @response.body
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert_equal 2, elements.size
+    end
+  end
+  
+  test "should not allow blank description on update event" do
+    post :update, :id => events(:one).id, :event => { :description => "" }
+    
+    assert_response :success
+    event = assigns(:event)
+    assert ! event.valid?
+    assert_equal 1, event.errors.size
+    error_msgs = event.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert_match error_msg, @response.body
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert_equal 2, elements.size
+    end
+  end
+  
+  test "should not allow nil group_id on update event" do
+    post :update, :id => events(:one).id, :event => { :group_id => nil }
+    
+    assert_response :success
+    event = assigns(:event)
+    assert ! event.valid?
+    assert_equal 1, event.errors.size
+    error_msgs = event.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert_match error_msg, @response.body
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert_equal 2, elements.size
+    end
+  end
+  
+  test "should not allow nil location_id on update event" do
+    post :update, :id => events(:one).id, :event => { :location_id => nil }
+    
+    assert_response :success
+    event = assigns(:event)
+    assert ! event.valid?
+    assert_equal 1, event.errors.size
+    error_msgs = event.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert_match error_msg, @response.body
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert_equal 2, elements.size
+    end
+  end
+  
+  test "should not allow nil start_date on update event" do
+    post :update, :id => events(:one).id, :event => { :start_date => nil }
+    
+    assert_response :success
+    event = assigns(:event)
+    assert ! event.valid?
+    assert_equal 1, event.errors.size
+    error_msgs = event.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert_match error_msg, @response.body
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert_equal 2, elements.size
+    end
+  end
+  
+  test "should not allow nil end_date on update event" do
+    post :update, :id => events(:one).id, :event => { :end_date => nil }
+    
+    assert_response :success
+    event = assigns(:event)
+    assert ! event.valid?
+    assert_equal 1, event.errors.size
+    error_msgs = event.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert_match error_msg, @response.body
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert_equal 2, elements.size
+    end
+  end
+  
+  test "should not allow end_date before start_date on update event" do
+    post :update, :id => events(:one).id, :event => { :end_date => events(:one).start_date-1 }
+    
+    assert_response :success
+    event = assigns(:event)
+    assert ! event.valid?
+    assert_equal 1, event.errors.size
+    error_msgs = event.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert_match error_msg, @response.body
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert_equal 2, elements.size
+    end
+  end
+  
+  test "should not allow date range that conflicts with existing event and location on update event" do
+    post :update, :id => events(:one).id, :event => { 
+      :location_id => locations(:two).id,
+      :start_date => locations(:two).events.first.start_date-1,
+      :end_date => locations(:two).events.first.end_date + 1
+    }
+    
+    assert_response :success
+    event = assigns(:event)
+    assert ! event.valid?
+    assert_equal 1, event.errors.size
+    error_msgs = event.errors.full_messages
+    error_msgs.each do |error_msg|
+      assert_match error_msg, @response.body
+    end
+    assert_select "div.fieldWithErrors" do |elements|
+      assert_equal 2, elements.size
+    end
+  end
 
   # destroy event tests
   test "should destroy event" do
