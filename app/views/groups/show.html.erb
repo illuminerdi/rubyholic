@@ -4,11 +4,11 @@
 
 <table border="1">
 	<tr>
-		<td>
+		<td valign="top">
       <div>Website: <%= link_to @group.url, @group.url %></div>
 			<div>Description:<br/><%= @group.description %></div>
     </td>
-		<td>this is where the map will live</td>
+		<td><%= render :partial => 'groups/map', :object => @group.events %></td>
 	</tr>
 	<tr>
 		<td colspan="2">
