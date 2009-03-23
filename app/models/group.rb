@@ -6,7 +6,7 @@ class Group < ActiveRecord::Base
     :message => "Description should be less than {{count}} characters in length"
   
   has_one :event
-  has_many :events
+  has_many :events, :order => "events.start_date ASC"
   has_many :locations, :through => :events
   has_one :location, :through => :event
     

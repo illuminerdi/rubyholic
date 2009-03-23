@@ -30,4 +30,9 @@ class GroupTest < ActiveSupport::TestCase
     assert group.errors.on(:description)
     assert_match /255/, group.errors.on(:description)
   end
+  
+  test "group events are in order by start date in ascension" do
+    group = groups(:one)
+    assert group.events.first.start_date <= group.events.last.start_date
+  end
 end
